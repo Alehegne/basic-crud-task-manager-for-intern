@@ -8,7 +8,7 @@ const response = require("../utils/response");
 
 async function getTaskController(req, res) {
   try {
-    const tasks = await getTaskService();
+    const tasks = await getTaskService(req.query);
     if (!tasks || tasks.length == 0) {
       return response(res, 200, false, "no tasks avalaible");
     }
@@ -42,7 +42,8 @@ async function markAsCompleleted(req, res) {
     if (!id) {
       return response(res, 403, false, "please,include the task id");
     }
-    const task = await markAsCompleletedService(id);
+    const status = req.status;
+    const task = await markAsCompleletedService(id, status);
     if (!task) {
       return response(res, 404, false, "task not found");
     }

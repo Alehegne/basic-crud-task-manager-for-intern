@@ -1,7 +1,10 @@
 const Tasks = require("../models/task.model");
-async function getTaskService() {
+async function getTaskService(query) {
   try {
-    const tasks = await Tasks.find();
+    const filter = {
+      ...(query.status && { status: query.status }),
+    };
+    const tasks = await Tasks.find(filter);
     console.log("tasks:", tasks);
     return tasks;
   } catch (error) {
@@ -24,17 +27,9 @@ async function postTaskService(title, description) {
   }
 }
 
-async function markAsCompleletedService(id) {
+async function markAsCompleletedService(id, status) {
   try {
-    //toggle the status of the task
-    const task = await Tasks.findById(id);
-    if (!task) {
-      console.log("task not found");
-      return null;
-    }
-    task.status = !task.status;
-    const updatedTask = await task.save();
-    console.log("task marked as completed:", updatedTask);
+    const task = await Tasks.findByIdAndUpdate(id, status);
     return task;
   } catch (error) {
     console.log("error in marking task as completed");

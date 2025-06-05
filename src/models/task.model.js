@@ -8,6 +8,10 @@ const taskSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  status: {
+    type: String,
+    enum: ["completed", "pending", "failed"],
+  },
 });
 
 module.exports = mongoose.model("tasks", taskSchema);
